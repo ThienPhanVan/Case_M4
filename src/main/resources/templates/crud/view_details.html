@@ -1,0 +1,113 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en" >
+<th:block th:fragment="view_details">
+
+    <div class="modal fade exampleModal" id="modalViewDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">View Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <input type="text" hidden>
+                        <div class="row col-lg-12">
+
+                            <div class="col-lg-5">
+                                <div class="col-md-8">
+                                    <tr>
+                                       <p type="text" id="urlImageVie" name="urlImageVie">
+
+                                       </p>
+<!--                                        <img height="400px" src="/assets/img/hinh12prm.jpg" alt="">-->
+                                    </tr>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-5">
+                                <div class="col-md-10 ml-auto">
+                                    <tr>
+                                        <h1 type="text" id="titleVie" name="titleVie"></h1>
+                                        <hr>
+                                    </tr>
+                                </div>
+
+                                <div class="col-md-10 ml-auto">
+                                    <tr>
+                                        <div class="row">
+
+                                            <h2>Giá : </h2>
+                                            <h2 id="priceVie" name="priceVie" style="margin-left: 5px"></h2>
+                                        </div>
+
+                                    </tr>
+                                </div>
+
+                                <div class="col-md-10 ml-auto">
+                                    <div class="row">
+                                        <tr>
+                                        <h5>Color :  </h5>
+                                        <h5 id="colorVie" name="colorVie" style="margin-left: 5px"></h5>
+                                        </tr>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="col-md-10 ml-auto">
+                                    <div class="row">
+                                        <tr>
+                                            <h5>Số lượng hiện có :  </h5>
+                                            <h5 id="quantityVie" name="quantityVie" style="margin-left: 5px"></h5>
+                                        </tr>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-10 ml-auto">
+                                    <div class="row">
+                                        <tr>
+                                            <h5>Category: </h5>
+                                            <h5 id="categoryVie" name="categoryVie" style="margin-left: 5px"></h5>
+                                        </tr>
+                                    </div>
+                                </div>
+
+
+<!--                                <div class="col-md-3 ml-auto">-->
+<!--                                    <tr>-->
+<!--                                        <th>Created At: </th>-->
+<!--                                        <td id="createdAtVie" name="createdAtVie"></td>-->
+<!--                                    </tr>-->
+<!--                                </div>-->
+
+<!--                                <div class="col-md-3 ml-auto">-->
+<!--                                    <tr>-->
+<!--                                        <th>Updated At: </th>-->
+<!--                                        <td id="updatedAtVie" name="updatedAtVie"></td>-->
+<!--                                    </tr>-->
+<!--                                </div>-->
+
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-sm-9">
+                                <tr>
+                                    <h5>Mô Tả </h5>
+                                    <h6 id="descriptionVie" name="descriptionVie"></h6>
+                                </tr>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>

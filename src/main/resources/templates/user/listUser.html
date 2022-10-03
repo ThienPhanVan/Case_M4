@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:replace="/layoutAdmin/head/bootstrap :: bootstrap"/>
+    <!-- Icons Css -->
+    <th:block th:replace="/layoutAdmin/head/app_icon :: app_icon"/>
+    <!-- App Css-->
+    <link href="/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
+
+</head>
+
+<body data-sidebar="dark">
+
+<div id="layout-wrapper">
+
+    <header id="page-topbar">
+        <div class="navbar-header">
+            <div class="d-flex">
+                <!-- LOGO -->
+                <div class="navbar-brand-box">
+                    <a href="/products" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="/assets/images/logo.svg" alt="" height="22">
+                                </span>
+                        <span class="logo-lg">
+                                    <img src="/assets/images/logo-dark.png" alt="" height="17">
+                                </span>
+                    </a>
+
+                    <a href="/products" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="/assets/images/logo-light.svg" alt="" height="22">
+                                </span>
+                        <span class="logo-lg">
+                                    <img src="/assets/images/logo-light.png" alt="" height="19">
+                                </span>
+                    </a>
+                </div>
+
+                <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect"
+                        id="vertical-menu-btn">
+                    <i class="fa fa-fw fa-bars"></i>
+                </button>
+
+                <!-- App Search-->
+                <form class="app-search d-none d-lg-block">
+                    <div class="position-relative">
+                        <input type="text" class="form-control" placeholder="Search...">
+                        <span class="bx bx-search-alt"></span>
+                    </div>
+                </form>
+            </div>
+
+            <div class="d-flex">
+
+                <div class="dropdown d-inline-block">
+                    <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img class="rounded-circle header-profile-user" src="/assets/images/users/avatar-1.jpg"
+                             alt="Header Avatar">
+                        <span class="d-none d-xl-inline-block ml-1">Henry</span>
+                        <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <!-- item-->
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="/logout"><i
+                                class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> Logout</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+    <th:block th:replace="/admin/left_sidebar :: left_sidebar"/>
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row col-lg-12">
+
+                                    <div class="col-lg-8">
+                                        <h4 class="card-title mb-4">User Management</h4>
+                                    </div>
+
+
+                                    <div class="col-lg-4">
+                                        <button class="btn btn-outline-primary" data-toggle="modal"
+                                                data-target="#modalCreateUser" id="btnShowModalCreateUser"
+                                                style="float: right">
+                                            Add New User
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table table-centered table-nowrap mb-0" id="tbUser">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Image</th>
+                                            <th>Username</th>
+                                            <th>FullName</th>
+                                            <th>Phone</th>
+                                            <th>Province</th>
+                                            <th>District</th>
+                                            <th>Ward</th>
+                                            <th>Address</th>
+                                            <th>Role</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<th:block th:replace="/crud/create_user :: create_user"/>
+<th:block th:replace="/crud/edit_user :: edit_user"/>
+<!--<th:block th:replace="/crud/view_details :: view_details"/>-->
+
+<th:block th:replace="/layoutAdmin/script/jvscript :: jvscript"/>
+<!-- App js -->
+<script src="/assets/js/app.js"></script>
+
+<script>
+    let users = [];
+    let user = new User();
+    let role = new Role();
+    let locationRegion = new LocationRegion();
+
+    enableTootip();
+
+    loadUsers();
+
+    getAllRoles();
+
+    function getAllRoles() {
+        return $.ajax({
+            headers: {
+                accept: "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "http://localhost:8080/api/roles/"
+        })
+            .done((data) => {
+                $("#roleCre").empty();
+                $.each(data, (i, item) => {
+                    role = item;
+                    let str = `
+                <option value="${role.id}">${role.code}</option>
+                `;
+                    $("#roleCre").append(str);
+
+                    $("#roleUp").append(str);
+
+                });
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+            })
+    }
+
+    function getUserById(userId) {
+        return $.ajax({
+            headers: {
+                accept: "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "http://localhost:8080/api/users/" + userId
+        })
+            .done((data) => {
+                user = data;
+                locationRegion = user.locationRegion;
+                role = user.role;
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+            })
+    }
+
+
+    function handleShowUpdateModalUser() {
+        $(".edit").on("click", function () {
+            let userId = $(this).data("id");
+            getUserById(userId).then(() => {
+                $("#userIdUp").val(userId);
+                $("#usernameUp").val(user.username);
+                $("#fullNameUp").val(user.fullName);
+                $("#phoneUp").val(user.phone);
+
+                $('#provinceUp').val(locationRegion.provinceId);
+
+                drawDistricts(locationRegion.provinceId).then(() => {
+                    $('#districtUp').val(locationRegion.districtId);
+
+                    drawWards(locationRegion.districtId).then(() => {
+                        $('#wardUp').val(locationRegion.wardId);
+                    });
+                });
+                $('#addressUp').val(locationRegion.address);
+
+                $("#modalUpdateUser").modal("show");
+
+            }).catch(() => {
+                alert("Error");
+            });
+        })
+    }
+
+
+    function renderUser(user) {
+        let str = `
+            <tr id="tr_${user.id}">
+                <td>${user.id}</td>
+                <td><img src="/assets/img/user.png" alt="" style="width: 70px; height:70px ; border-radius:50%"> </td>
+                <td>${user.username}</td>
+                <td>${user.fullName}</td>
+                <td>${user.phone}</td>
+                <td>${locationRegion.provinceName}</td>
+                <td>${locationRegion.districtName}</td>
+                <td>${locationRegion.wardName}</td>
+                <td>${locationRegion.address}</td>
+                <td>${role.code}</td>
+
+                <td class="text-center">
+                    <button class="btn btn-outline-primary edit" data-id="${user.id}"
+                         data-toggle="tooltip" placement="top" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </td>
+
+                <td class="text-center">
+                    <button class="btn btn-outline-danger deleted" data-id="${user.id}"
+                         data-toggle="tooltip" placement="top" title="Delete">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
+            </tr>
+            `;
+        return str;
+
+    }
+
+    function loadUsers() {
+        $.ajax({
+            headers: {
+                accept: "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "http://localhost:8080/api/users?deleted=0"
+        })
+            .done((data) => {
+                let tbUser = $("#tbUser tbody");
+
+                data.forEach(item => {
+                    user = item;
+                    locationRegion = user.locationRegion;
+                    role = user.role;
+
+                    let str = renderUser(user);
+                    tbUser.prepend(str);
+
+                });
+                enableTootip();
+
+                removeEventShowModalUser();
+
+                handShowAllModalUser();
+
+
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+            })
+    }
+
+    function handShowAllModalUser() {
+
+        handleShowUpdateModalUser();
+
+        handleShowConfirmDelete();
+
+    }
+
+    function doCreateUser() {
+        user.id = 1;
+        user.username = $("#usernameCre").val();
+        user.password = $("#passwordCre").val();
+        user.fullName = $("#fullNameCre").val();
+        user.phone = $("#phoneCre").val();
+        locationRegion.provinceId = $("#province").val();
+        locationRegion.provinceName = $("#province :selected").text();
+        locationRegion.districtId = $("#district").val();
+        locationRegion.districtName = $("#district :selected").text();
+        locationRegion.wardId = $("#ward").val();
+        locationRegion.wardName = $("#ward :selected").text();
+        locationRegion.address = $("#address").val();
+        user.locationRegion = locationRegion;
+        // role.id = 2;
+        // role.code = $("#roleCre :selected").text();
+        user.role = role;
+        role.id = $("#roleCre").val();
+        user.deleted = 0;
+
+        $.ajax({
+            headers: {
+                accept: "application/json",
+                "content-type": "application/json"
+            },
+            type: "POST",
+            url: "http://localhost:8080/api/users/create",
+            data: JSON.stringify(user)
+
+        })
+            .done((data) => {
+                user = data;
+                let tbUser = $("#tbUser tbody");
+                let str = renderUser(user);
+                tbUser.prepend(str);
+
+                $("#modalCreateUser").modal("hide");
+
+
+                $("#frmCreateUser")[0].reset();
+
+                removeEventShowModalUser();
+
+                handShowAllModalUser();
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+                $('.modal-alert-danger').html('').removeClass('hide').addClass('show');
+
+                if (jqXHR.responseJSON.message) {
+                    let msg = jqXHR.responseJSON.message;
+
+                    let str = `<label id="message-error" class="error" for="message">${msg}</label>`;
+
+                    $('#modalCreateUser .modal-alert-danger').append(str);
+                }
+                else if (jqXHR.responseJSON) {
+                    $.each(jqXHR.responseJSON, (key, item) => {
+                        let str = `<label id="${key}-error" class="error" for="${key}">${item}</label>`;
+                        $("#" + key).addClass("error");
+
+                        $('#modalCreateUser .modal-alert-danger').append(str);
+                    })
+                }
+            })
+
+        // })
+    }
+
+    function doUpdateUser(){
+        let userId = $("#userIdUp").val();
+        user.username = $("#usernameUp").val();
+        user.fullName =  $("#fullNameUp").val();
+        user.phone = $("#phoneUp").val();
+
+        locationRegion.provinceId = $("#provinceUp").val();
+        locationRegion.provinceName =  $("#provinceUp :selected").text();
+
+        locationRegion.districtId = $("#districtUp").val();
+        locationRegion.districtName = $("#districtUp :selected").text();
+
+        locationRegion.wardId = $("#wardUp").val();
+        locationRegion.wardName =  $("#wardUp :selected").text();
+
+        locationRegion.address = $("#addressUp").val();
+
+        user.locationRegion = locationRegion;
+
+
+        role.id = $("#roleUp").val();
+        role.code = $("#roleUp :selected").text();
+        user.role = role;
+
+        $.ajax({
+            headers: {
+                accept: "application/json",
+                "content-type": "application/json"
+            },
+            type: "PUT",
+            url: "http://localhost:8080/api/users/update",
+            data: JSON.stringify(user)
+        })
+            .done((data) => {
+
+                user = data;
+                locationRegion = user.locationRegion;
+                role = user.role;
+
+                let str = renderUser(user);
+                let updateRow = $("#tr_" + userId);
+
+                updateRow.replaceWith(str);
+
+                $("#modalUpdateUser").modal("hide");
+
+                $("#frmUpdateUser")[0].reset();
+
+                removeEventShowModalUser();
+
+                handShowAllModalUser();
+            })
+            .fail((jqXHR) => {
+                console.log("fail");
+                console.log(jqXHR);
+                $('.modal-alert-danger').html('').removeClass('hide').addClass('show');
+
+                if (jqXHR.responseJSON.message) {
+                    let msg = jqXHR.responseJSON.message;
+
+                    let str = `<label id="message-error" class="error" for="message">${msg}</label>`;
+
+                    $('#modalUpdateUser .modal-alert-danger').append(str);
+                }
+                else if (jqXHR.responseJSON) {
+                    $.each(jqXHR.responseJSON, (key, item) => {
+                        let str = `<label id="${key}-error" class="error" for="${key}">${item}</label>`;
+                        $("#" + key).addClass("error");
+
+                        $('#modalUpdateUser .modal-alert-danger').append(str);
+                    })
+                }
+            })
+
+    }
+
+   $("#btnUpdateUser").on('click', () => {
+        $("#modalUpdateUser").modal("show");
+       $("#frmUpdateUser").submit();
+    });
+
+    let btnCreateUser = $("#btnCreateUser");
+    btnCreateUser.on('click', () => {
+        $("#modalCreateUser").modal("show");
+        $("#frmCreateUser").submit();
+    });
+
+    function handleShowConfirmDelete() {
+        $(".deleted").on("click", function () {
+            let useId = $(this).data("id");
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: "warning!",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        headers: {
+                            accept: "application/json",
+                            "content-type": "application/json"
+                        },
+                        type: "PATCH",
+                        url: "http://localhost:8080/api/users/delete/" + useId,
+                        data: JSON.stringify(user)
+                    }).done((data) => {
+                        $("#tr_" + useId).remove();
+                        Swal.fire(
+                            'Deleted!',
+                            'The client has been deleted.',
+                            'success'
+                        )
+
+                    }).fail((jqXHR) => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        })
+                    })
+                }
+            })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Customer ID invalid',
+                    })
+                })
+        });
+
+    }
+
+
+    function enableTootip() {
+        const tooltipTriggerList = document.querySelectorAll('[data-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    }
+
+    function drawProvinces() {
+        return $.ajax({
+            header: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "https://vapi.vnappmob.com/api/province",
+        })
+            .done((data) => {
+                $.each(data.results, (i, item) => {
+                    let str = `<option value="${item.province_id}"> ${item.province_name} </option> `;
+
+                    $('#province').prepend(str);
+                    $('#provinceUp').prepend(str);
+                })
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+            })
+    }
+
+    function drawDistricts(provinceId) {
+        return $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "https://vapi.vnappmob.com/api/province/district/" + provinceId,
+        })
+            .done((data) => {
+                $('#district').html('');
+                $('#districtUp').html('');
+                $.each(data.results, (i, item) => {
+                    let str = `<option value="${item.district_id}"> ${item.district_name} </option>`;
+
+                    $('#district').prepend(str);
+                    $('#districtUp').prepend(str);
+                })
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+            })
+    }
+
+    function drawWards(districtId) {
+        return $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "https://vapi.vnappmob.com/api/province/ward/" + districtId,
+        })
+            .done((data) => {
+                $('#ward').html('');
+                $('#wardUp').html('');
+
+                $.each(data.results, (i, item) => {
+                    let str = `<option value="${item.ward_id}">${item.ward_name}</option>`;
+
+                    $('#ward').prepend(str);
+                    $('#wardUp').prepend(str);
+                })
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+            })
+    }
+
+    /*Hàm xử lí tỉnh lấy theo id của tĩnh xử lí chuỗi liên tục*/
+    drawProvinces().then(() => {
+        let provinceId = $('#province').val();
+        drawDistricts(provinceId).then(() => {
+            let districtId = $('#district').val()
+            drawWards(districtId)
+        })
+    });
+
+    //1.Sự kiện thay đổi tỉnh khi tạo Create, tỉnh cha huyện , huyện cha xã (theo cơ chế này để khi click sẽ thay đổi theo)
+    $('#province').on('change', function () {
+        let provinceId = $('#province').val();
+        drawDistricts(provinceId).then(() => {
+            let districtId = $('#district').val()
+            drawWards(districtId)
+        })
+    })
+    $('#district').on('change', function () {
+        let districtId = $('#district').val()
+        drawWards(districtId)
+    })
+
+    //1.Sự kiện thay đổi tỉnh khi Update, tỉnh cha huyện , huyện cha xã (theo cơ chế này để khi click sẽ thay đổi theo)
+    $('#provinceUp').on('change', function () {
+        let provinceId = $('#provinceUp').val();
+        drawDistricts(provinceId).then(() => {
+            let districtId = $('#districtUp').val()
+            drawWards(districtId)
+        })
+    })
+    $('#districtUp').on('change', function () {
+        let districtId = $('#districtUp').val();
+        drawWards(districtId)
+    })
+
+    function removeEventShowModalUser() {
+        $(".edit").off();
+        $(".deleted").off();
+    }
+
+    $("#frmCreateUser").validate({
+        rules: {
+            usernameCre: {
+                required: true,
+                minlength: 6,
+                maxlength: 35
+            },
+            fullNameCre: {
+                required: true,
+                minlength: 2,
+                maxlength: 35,
+            },
+            phoneCre: {
+                required: true,
+                minlength: 10,
+                maxlength: 11,
+            },
+            passwordCre: {
+                required: true,
+                minlength: 3,
+                maxlength: 30,
+            },
+            address: {
+                required: true,
+                minlength: 3,
+                maxlength: 50,
+            }
+        },
+        messages: {
+            usernameCre: {
+                required: "Vui lòng nhập đúng định dạng!",
+                minlength: "Độ dài tối thiểu là 6 ký tự",
+                maxlength: "Độ dài tối đa là 35 ký tự"
+            },
+            fullNameCre: {
+                required: "Vui lòng nhập họ và tên!",
+                minlength: "Độ dài tối thiểu là 2 ký tự",
+                maxlength: "Độ dài tối đa là 15 ký tự",
+            },
+            passwordCre: {
+                required: "Vui lòng nhập mật khẩu!",
+                minlength: "Độ dài tối thiểu 3 ký tự",
+                maxlength: "Độ dài tối đa 30 ký tự",
+            },
+            phoneCre: {
+                required: "Vui lòng nhập đúng định dạng số điện thoại",
+                minlength: "Độ dài tối thiểu 10 số",
+                maxlength: "Độ dài tối đa 11 số !",
+            },
+            address: {
+                required: "Vui lòng nhập địa chỉ!",
+                minlength: "Độ dài tối thiểu là 3 ký tự",
+                maxlength: "Độ dài tối đa là 50 ký tự",
+            }
+        },
+        errorLabelContainer: "#modalCreateUser .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#modalCreateUser .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#modalCreateUser .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#modalCreateUser .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#frmCreateUser input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: function () {
+            doCreateUser(user);
+        }
+    })
+
+    $("#frmUpdateUser").validate({
+        rules: {
+            usernameUp: {
+                required: true,
+                minlength: 6,
+                maxlength: 35
+            },
+            fullNameUp: {
+                required: true,
+                minlength: 2,
+                maxlength: 35,
+            },
+            phoneUp: {
+                required: true,
+                minlength: 10,
+                maxlength: 11,
+            },
+            addressUp: {
+                required: true,
+                minlength: 3,
+                maxlength: 50,
+            }
+        },
+        messages: {
+            usernameUp: {
+                required: "Vui lòng nhập đúng định dạng!",
+                minlength: "Độ dài tối thiểu là 6 ký tự",
+                maxlength: "Độ dài tối đa là 35 ký tự"
+            },
+            fullNameUp: {
+                required: "Vui lòng nhập họ và tên!",
+                minlength: "Độ dài tối thiểu là 2 ký tự",
+                maxlength: "Độ dài tối đa là 15 ký tự",
+            },
+            phoneUp: {
+                required: "Vui lòng nhập đúng định dạng số điện thoại",
+                minlength: "Độ dài tối thiểu 10 số",
+                maxlength: "Độ dài tối đa 11 số !",
+            },
+            addressUp: {
+                required: "Vui lòng nhập địa chỉ!",
+                minlength: "Độ dài tối thiểu là 3 ký tự",
+                maxlength: "Độ dài tối đa là 50 ký tự",
+            }
+        },
+        errorLabelContainer: "#modalUpdateUser .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#modalUpdateUser .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#modalUpdateUser .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#modalUpdateUser .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#frmUpdateUser input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: function () {
+            doUpdateUser(user);
+        }
+    })
+</script>
+</body>
+</html>

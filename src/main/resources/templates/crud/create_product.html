@@ -1,0 +1,57 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en" >
+<th:block th:fragment="create_product">
+
+    <div class="modal fade" id="modalCreateProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal Add New Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide"></div>
+
+                    <form action="" id="frmCreate">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-10 mt-3">
+                                <label for="titlePro">Title</label>
+                                <input type="text" class="form-control" id="titlePro" name="titleCre">
+                            </div>
+                            <div class="col-lg-10 mt-3">
+                                <label for="imagePro">Image</label>
+                                <input type="text" class="form-control" id="imagePro" name="imageCre">
+                            </div>
+                            <div class="col-lg-10 mt-3">
+                                <label for="colorPro">Color</label>
+                                <input type="text" class="form-control" id="colorPro" name="colorCre">
+                            </div>
+                            <div class="col-lg-10 mt-3">
+                                <label for="pricePro">Price</label>
+                                <input type="number" class="form-control" id="pricePro" name="priceCre">
+                            </div>
+                            <div class="col-lg-10 mt-3">
+                                <label for="quantityPro">Quantity</label>
+                                <input type="text" class="form-control" id="quantityPro" name="quantityCre">
+                            </div>
+                            <div class="col-lg-10 mt-3">
+                                <label for="descriptionPro">Description</label>
+                                <input type="text" class="form-control" id="descriptionPro" name="descriptionCre">
+                            </div>
+                            <div class="col-lg-10 mt-3">
+                                <label for="categoryPro">Category</label>
+                                <select class="mdi-format-section" id="categoryPro" name="categoryCre"></select>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-primary" id="btnCreate">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>

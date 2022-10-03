@@ -1,0 +1,48 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org" lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--    <div class="container">-->
+<!--        <h1>Login page</h1>-->
+<!--        <form action="/login" method="post" th:object="${user}">-->
+<!--            <input type="text" th:field="*{username}">-->
+<!--            <input type="text" th:field="*{password}">-->
+<!--            <button type="button" id="btnLogin">Login</button>-->
+<!--        </form>-->
+<!--    </div>-->
+
+<!--    <script type="text/javascript" src="/assets/libs/jquery/jquery.min.js"></script>-->
+
+<!--    <script>-->
+<!--        $("#btnLogin").on("click", () => {-->
+<!--            let username = $("#username").val();-->
+<!--            let password = $("#password").val();-->
+
+<!--            let user = {-->
+<!--                username,-->
+<!--                password-->
+<!--            }-->
+
+<!--            $.ajax({-->
+<!--                headers: {-->
+<!--                    "accept": "application/json",-->
+<!--                    "content-type": "application/json"-->
+<!--                },-->
+<!--                type: "POST",-->
+<!--                url: "http://localhost:8080/api/auth/login",-->
+<!--                data: JSON.stringify(user)-->
+<!--            })-->
+<!--            .done((data) => {-->
+<!--                location.href = "/products";-->
+<!--            })-->
+<!--            .fail((jqXHR) => {-->
+<!--                console.log(jqXHR);-->
+<!--            })-->
+<!--        })-->
+<!--    </script>-->
+<!--</body>-->
+<!--</html>-->

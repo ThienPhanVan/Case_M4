@@ -1,0 +1,84 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en" >
+<th:block th:fragment="create_user">
+
+    <div class="modal fade" id="modalCreateUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal Add New User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide"></div>
+
+                    <form action="" id="frmCreateUser">
+                        <fieldset class="row g-3">
+
+                            <div class="col-md-3">
+                                <label class="form-label">User Name</label>
+                                <input type="email" class="form-control" id="usernameCre" name="usernameCre" placeholder="txr@gmail.com">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label">FullName</label>
+                                <input type="text" class="form-control" id="fullNameCre" name="fullNameCre">
+                            </div>
+
+                            <div class="col-sm-3">
+                                <label>PassWord</label>
+                                <div class="input-group mb-3">
+                                    <input type="password" class="form-control" id="passwordCre" name="passwordCre" required>
+<!--                                    <div class="input-group-append">-->
+<!--                                        <button class="btn btn-outline-secondary" type="button" id="btnPassword">-->
+<!--                                        </button>-->
+<!--                                    </div>-->
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phoneCre" name="phoneCre">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label">Province</label>
+                                <select class="form-select" id="province" name="province">
+
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">District</label>
+                                <select class="form-select" id="district" name="district">
+
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Ward</label>
+                                <select class="form-select" id="ward" name="ward">
+
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" name="address">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Role</label>
+                                <select id="roleCre" class="form-select">
+                                            <option value="2">User</option>
+                                </select>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-primary" id="btnCreateUser">Create User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
