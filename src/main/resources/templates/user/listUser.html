@@ -214,6 +214,7 @@
                     });
                 });
                 $('#addressUp').val(locationRegion.address);
+                $('#roleUp').val(role.id);
 
                 $("#modalUpdateUser").modal("show");
 
@@ -313,10 +314,8 @@
         locationRegion.wardName = $("#ward :selected").text();
         locationRegion.address = $("#address").val();
         user.locationRegion = locationRegion;
-        // role.id = 2;
-        // role.code = $("#roleCre :selected").text();
+        role.id = 2;
         user.role = role;
-        role.id = $("#roleCre").val();
         user.deleted = 0;
 
         $.ajax({

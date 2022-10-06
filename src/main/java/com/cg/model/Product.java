@@ -34,7 +34,7 @@ public class Product extends BaseEntity{
     @Column(name = "stop_selling",columnDefinition = "boolean default false")
     private boolean stopSelling;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private String title;
 
     @Column(nullable = false)

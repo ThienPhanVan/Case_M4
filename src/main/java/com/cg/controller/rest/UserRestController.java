@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/users")
 public class UserRestController {
+
+
 
     @Autowired
     private IUserService userService;
@@ -94,12 +97,12 @@ public class UserRestController {
         if(bindingResult.hasFieldErrors()){
             return appUtils.mapErrorToResponse(bindingResult);
         }
+        Optional<User> userDTOOptional = userService.findById(userDTO.getId());
+        if(!userDTOOptional.isPresent()){
+            throw new DataInputException("Không tìm thấy ID người dùng!");
 
-        Boolean exitsById = userService.existsById(userDTO.getId());
-        if(!exitsById){
-            throw new EmailExistsException("ID không tồn tại!");
+
         }
-
         Boolean exitsByUserName = userService.existsByUsernameAndIdIsNot(userDTO.getUsername(), userDTO.getId());
         if(exitsByUserName){
             throw new EmailExistsException("UserName đã tồn tại!");
@@ -117,8 +120,15 @@ public class UserRestController {
         userDTO.getLocationRegion().setId(0L);
 
         try {
+            userDTOOptional.get().setUsername(userDTO.getUsername());
+            userDTOOptional.get().setFullName(userDTO.getFullName());
+            userDTOOptional.get().setPassword("123");
+            userDTOOptional.get().setPhone(userDTO.getPhone());
+            userDTOOptional.get().setRole(userDTO.getRole().toRole());
+            userDTOOptional.get().setLocationRegion(userDTO.getLocationRegion().toLocationRegion());
+            userDTOOptional.get().setUrlImage("user.png");
+            User updateUser = userService.saveUpdate(userDTOOptional.get());
 
-            User updateUser = userService.saveUpdate(userDTO.toUser());
             return new ResponseEntity<> (updateUser.toUserDTO(), HttpStatus.ACCEPTED);
 
         }catch (DataIntegrityViolationException e){

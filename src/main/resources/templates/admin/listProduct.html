@@ -102,37 +102,17 @@
                             <div class="card-body">
                                 <div class="row col-lg-12">
 
-                                    <div class="col-lg-2">
-                                        <a href="#" class="card-title mb-4">Iphone</a>
+                                    <div class="col-lg-8">
+                                        <a href="#" class="card-title mb-4">Product Management</a>
                                     </div>
 
-                                    <div class="col-lg-2">
-                                        <a href="#" class="card-title mb-4">Macbook</a>
-                                    </div>
-
-                                    <div class="col-lg-2">
-                                        <a href="#" class="card-title mb-4">Tab</a>
-                                    </div>
-
-                                    <div class="col-lg-2">
-                                        <a href="#" class="card-title mb-4">Sound</a>
-                                    </div>
-
-                                    <div class="col-lg-2">
+                                    <div class="col-lg-4 border-0" >
                                         <button class="btn btn-outline-primary" data-toggle="modal"
                                                 data-target="#modalCreateProduct" id="btnShowModalCreate"
                                                 style="float: right">
                                             Add New Product
                                         </button>
                                     </div>
-
-                                    <div class="col-lg-2">
-                                        <button class="btn btn-outline-primary" data-toggle="modal"
-                                                data-target="#modalCreateCategory" style="float: right">
-                                            Add New Category
-                                        </button>
-                                    </div>
-
                                 </div>
 
                                 <div class="table-responsive">
@@ -356,17 +336,6 @@
 
     }
 
-    // function selectAllProduct() {
-    //     return $.ajax({
-    //         url: "http://localhost:8080/api/products?deleted=0",
-    //         type: "GET"
-    //     }).done((data) => {
-    //         data;
-    //     }).fail((error) => {
-    //         alert("sos")
-    //     })
-    // }
-
     function getProductById(productId) {
         return $.ajax({
             headers: {
@@ -398,19 +367,22 @@
                 $("#categoryPro").empty();
                 $.each(data, (i, item) => {
                     category = item;
-                    let str = `
-                <option value="${category.id}">${category.title}</option>
-                `;
+                    let str = `<option value="${category.id}">${category.title}</option>`;
+                  // let  list = `<button class="btn-category iphone" onclick="loadProductByCategory(${category.id})">${category.title}</button>`
+
                     $("#categoryPro").append(str);
 
                     $("#categoryUp").append(str);
 
+                    // $("#productCategories").append(list);
                 });
             })
             .fail((jqXHR) => {
                 console.log(jqXHR);
             })
     }
+
+
 
     function handleShowViewDetail() {
         $(".detail").on("click", function () {
@@ -620,7 +592,7 @@
             url: url,
             type: "GET",
         }).done((data) => {
-            $(".product-items").remove()
+            $("#tbProduct tbody").remove()
             $.each(data, (i, item) => {
                 renderProduct(item);
             })
